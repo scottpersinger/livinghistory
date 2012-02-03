@@ -83,10 +83,11 @@ Next steps basically fall into 2 buckets:
 
 
 The player needs to add support for:
-*video
-*visual themes via a switching the CSS file
-*Playback control. Autoplay, pause, stop, full-screen, mute
-*Image transitions (fade in, fade out)
+
+* video
+* visual themes via a switching the CSS file
+* Playback control. Autoplay, pause, stop, full-screen, mute
+* Image transitions (fade in, fade out)
 
 The Editor is really the big project. This needs a basic user reg/authentication system
 in the rails app. Then it needs Story and Page models so that users can create and
