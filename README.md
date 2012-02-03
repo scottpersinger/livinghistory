@@ -1,4 +1,5 @@
-== Living Hisory
+Living Hisory
+=============
 
 This web app is an experiment in narrative storytelling.
 
@@ -19,7 +20,8 @@ will include:
 Another analogy for the application is basically giving people a tool to create
 "Ken Burns"-style documentaries. 
 
-== Story metadata
+Story metadata
+------------------
 
 I have started to define a schema for storing a single "story". Look at public/kittinger_story.yml
 for an example. Basically a story has story-level metadata (title, author, etc..) and then
@@ -27,7 +29,8 @@ it defines a set of pages. Each page defines a set of elements that appear on th
 (text, images, video) and give timing cues as to when those elements should appear or
 disappear. There is also the beginnings of some "transition animation" rules.
 
-== Story player
+Story player
+----------------
 
 This story player is an HTML5/Javascript application which knows how to render a given
 story. Currently the player is contained in public/player.html. The player works by
@@ -38,7 +41,8 @@ Inside player.html, it reads the story metadata and generates DOM elements accor
 to the pages and elements of the story. The current code has very basic support
 for pages, text elements, images, and audio.
 
-== Story editor
+Story editor
+-----------------
 
 It is envisioned to eventually have a full story editor. This editor would allow you
 to register an account, create stories, and edit stories via a drag-and-drop interface
@@ -54,19 +58,22 @@ media elements on the page with the narration.
 
 For now however, stories can only be edited by editing the yaml file stored on the server.
 
-== Getting started
+Getting started
+=====================
 
 Download the Rails app. You need at least Rails 3.1.3. Run with "rails server", then
 just go to: http://localhost:3000/player.html. The Kittinger story is currently
 hard-coded in.
 
-== A note on browser support
+A note on browser support
+--------------------------
 
 Currently I am doing development solely in Chrome, and not worrying about support for any
 other browser. I prefer to push the limits of HTML5 to see what is possible, and we can
 worry about supporting other browsers later.
 
-== Next steps
+Next steps
+--------------------------
 
 Next steps basically fall into 2 buckets:
 * Player work
