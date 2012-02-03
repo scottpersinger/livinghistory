@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="/assets/story.css" />
+</head>
+<body>
+
+<script>
+	var StoryPlayer = (function() {
+		// Story play is based on a page_queue. Only one page is visible at a time.
+		// The user may move forward or backward in the page queue, or page transitions
+		// may be triggered automatically by time.
+		//
+		// Each page has an event_queue, which is the set of scheduled events to trigger on that page.
+		// "Events" can be items to show visually or audio files to play.
+
+		var story;
+		var page_queue;
+		var current_page = -1;
+		var last_page = -1;
+
+		function start() {
+			$.getJSON('/story/kittinger', function(result) {
+				story = result;
+				page_queue = [
+					{background:'#FFFFFF',
+				 	timeline: [
+						{item:'text',
+						css_class:'story-title', 
+					 	content:story.title,
+					 	time_in:0.0,
+					 	trans_in:'fade:2.0',
+					 	time_out:5.0,
+					 	trans_out:'fade:2.0'
+						}
+					]}
+				];
+				page_queue = page_queue.concat(story.pages);
+				show_page(0);
+			});
+		}
+
+		function show_page(page_number) {
+			var page = page_queue[page_number];
+			last_page = current_page;
+			current_page = page_number;
+
+			$('audio').each(function() {
+				this.pause();
+			});
+
+			if (!page.dom) {
+				page.dom = render_page(page, current_page);
+			}
+
+			$('body').append(page.dom);
+			setTimeout(function() {
+				if (last_page >= 0) {
+					$('#page' + last_page).addClass('fadeOut').css('opacity', 0);
+				}
+				$('#page' + current_page).addClass('fadeIn').css('opacity', 1);
+				setTimeout(function() {
+					if (last_page >= 0) {
+						$('#page audio').remove();
+						$('#page'  + last_page).remove();
+						page_queue[last_page].dom = null;
+					}
+					$('.page').removeClass('fadeIn').removeClass('fadeOut');
+				}, 2000);
+	
+			}, 0);
+
+
+			animate_page(page);
+			bind_buttons();
+
+			if (page.duration) {
+				setTimeout(transition_page(page_number+1), page.duration*1000);
+			} else {
+				setTimeout(show_buttons, (page.last_element_time + 2) * 1000);
+			}
+		}	
+
+		function show_buttons() {
+			if (current_page > 0) {
+				$('.left-button').animate({'opacity':1.0});
+			}
+			if (current_page < page_queue.length) {
+				$('.right-button').animate({'opacity':1.0});
+			}
+		}
+
+		function bind_buttons() {
+			$('.left-button').click(function(e) {
+				e.preventDefault();
+
+				transition_page(current_page-1);
+			});
+
+			$('.right-button').click(function(e) {
+				e.preventDefault();
+
+				transition_page(current_page+1);
+			})
+		}
+
+		function transition_page(page_number) {
+			// TODO: Implement real transitions
+			show_page(page_number);
+		}
+		
+		// Builds a new page DOM and creates a render queue from the timeline items.
+		function render_page(page, page_number) {
+			var div = $('<html><div class="page" id="page' + page_number + '" style=""><a class="left-button"><img src="/assets/left-arrow.png" /></a><a class="right-button"><img src="/assets/right-arrow.png" /></a></div></html>');
+			style_item(div, page);
+			return div[0];
+		}
+
+		function animate_page(page) {
+			var last_element_time = 0;
+			$.each(page.timeline, function(index, item) {
+				if (item.time_in) {
+					if (item.time_in > last_element_time) {
+						last_element_time = item.time_in;
+					}
+					setTimeout(function() {render_event(page, item)}, (item.time_in*1000));		
+				} else {
+					render_event(page, item);
+				}
+			});
+			page.last_element_time = last_element_time;
+		}
+
+		function render_event(page, item) {
+			$(page.dom).append(build_event(page, item));
+			setTimeout(function() {
+				$('#page' + current_page + ' audio').each(function() {
+					this.play();
+				});
+			}, 1500);
+		}
+
+		function build_event(page, item) {
+			// TODO: Implement even transitions
+			switch (item.item) {
+				case 'text':
+					return style_item($('<html><div class="item text-item">' + item.content + '</div></html>'), item);
+				case 'image':
+					return style_item($('<html><img class="item image-item" src="' + item.url + '" /></html>'), item);
+				case 'audio':
+					return $('<html><div class="audio-player"><audio controls preload="auto"><source src="' + item.url + '" type="audio/mpeg" /></audio></div></html>')[0];
+			}
+		}
+
+		function style_item(element, item) {
+			var m;
+			if (item.frame) {
+				// Example: 500,20/400x
+				m = item.frame.match(/(\d+),(\d+)\/(\d+)?x(\d+)?/);
+				element.css('left', m[1] + 'px');
+				element.css('top', m[2] + 'px');
+				if (m[3]) {
+					element.css('width', m[3] + 'px');
+				}
+				if (m[4]) {
+					element.css('height', m[4] + 'px');
+				}
+			}
+			if (item.background) {
+				if (m = item.background.match(/^\s*#[\d\w]+\s*$/)) {
+					element.css('background', m[0]);
+				} else if (m = item.background.match(/(#[\d\w]+)-(#[\d\w]+)/)) {
+					element.css('background-image', '-webkit-linear-gradient(top,' + m[1] + ',' + m[2] + ')');
+				}
+			}
+			for (var k in item) {
+				if (m = k.match(/css_(\w+)/)) {
+					if (m[1] == "class") {
+						element.attr('class', item[k]);
+					} else {
+						element.css(m[1], item[k]);
+					}
+				}
+			}
+			return element;
+		}
+
+		return {
+			start: start,
+			page_queue: function() { return page_queue; }
+		}
+
+	}());
+
+	$(StoryPlayer.start);
+
+</script>
+
+</body>

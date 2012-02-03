@@ -1,0 +1,63 @@
+body {
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	margin:0;
+	background:black;
+}
+div.page {
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	opacity:0;
+}
+
+.item {
+	position:absolute;
+}
+
+.item-text {
+	color:black;
+}
+
+.story-title {
+	font-size:64px;
+	width:100%;
+	margin-top:20%;
+	text-align:center;
+}
+
+.left-button {
+	opacity:0;
+	position:absolute;
+	left:4px;
+	top:50%;
+	marginTop:-12px;
+}
+
+.right-button {
+	opacity:0;
+	position:absolute;
+	right:4px;
+	top:50%;
+	marginTop:-12px;
+}
+
+.audio-player {
+	position:absolute;
+	left:50%;
+	margin-left:-40px;
+	bottom: 10px;
+}
+
+div.fadeOut {
+	-webkit-transition: opacity 0.5s ease-out;
+}
+
+div.fadeIn {
+	-webkit-transition: opacity 1.5s ease-in;
+}

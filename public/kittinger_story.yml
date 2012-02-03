@@ -1,0 +1,21 @@
+---
+:title: The Man Who Fell from the Sky
+:caption: the story of Jospeh Kittinger
+:pages:
+- :title: Before we went to the moon
+  :background: "#333333-#666666"
+  :trans_in: fade,1.0
+  :timeline:
+  - :item: audio
+    :url: /martin_luther_king_on_vietnam.mp3
+    :time_in: 1
+  - :item: image
+    :time_in: 2
+    :url: http://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Joseph_Kittinger%2C_Jr.jpg/483px-Joseph_Kittinger%2C_Jr.jpg
+    :frame: 500,20/400x
+    :trans_in: fade:1.0
+  - :item: image
+    :time_in: 4
+    :url: http://www.historyguy.com/vietnam_war.jpg
+    :frame: 10,500/400x
+    :trans_in: fade:1.0
