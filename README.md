@@ -13,9 +13,10 @@ Functionally a story will work like a Powerpoint presentation: a sequence of ful
 that you move through one at a time. However, where presentations are oriented towards text,
 LivingHistory is oriented towards telling engaging stories. I imagine that good stories
 will include:
-# Voice narration on each page
-# Images and video - Ideally from original sources
-# timed transitions so that elements may appear according to timing with the narration
+
+* Voice narration on each page
+* Images and video - Ideally from original sources
+* timed transitions so that elements may appear according to timing with the narration
 
 Another analogy for the application is basically giving people a tool to create
 "Ken Burns"-style documentaries. 
@@ -76,8 +77,10 @@ Next steps
 --------------------------
 
 Next steps basically fall into 2 buckets:
+
 * Player work
 * Editor
+
 
 The player needs to add support for:
 *video
