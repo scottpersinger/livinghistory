@@ -3,7 +3,9 @@ Livinghistory::Application.routes.draw do
   # first created -> highest priority.
 
   match '/story/:name' => 'site#story'
-  
+  get '/story' => 'site#story'
+
+  root :to => 'site#index'
 
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'

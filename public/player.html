@@ -19,9 +19,29 @@
 		var page_queue;
 		var current_page = -1;
 		var last_page = -1;
+		var params = {};
+
+		function parseParams() {
+			(function () {
+			    var e,
+			        a = /\+/g,  // Regex for replacing addition symbol with a space
+			        r = /([^&=]+)=?([^&]*)/g,
+			        d = function (s) { return decodeURIComponent(s.replace(a, " ")); },
+			        q = window.location.search.substring(1);
+
+			    while (e = r.exec(q))
+			       params[d(e[1])] = d(e[2]);
+			})();
+		}
 
 		function start() {
-			$.getJSON('/story/kittinger', function(result) {
+			parseParams();
+
+			var story = '/kittinger';
+			if (params.url) {
+				story = '';
+			}
+			$.getJSON('/story' + story, params, function(result) {
 				story = result;
 				page_queue = [
 					{background:'#FFFFFF',
